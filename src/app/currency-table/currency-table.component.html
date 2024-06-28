@@ -1,0 +1,134 @@
+<div class="container-currencies">
+  <div class="container-data">
+    <div class="container-calendar" [formGroup]="currencyForm">
+      <div class="container-dropdown">
+        <label class="label-currencies" for="currencyTable"
+          >Wybierz datę oraz tabele z walutami:</label
+        >
+        <p-dropdown
+          [options]="tables"
+          formControlName="selectedTable"
+          placeholder="Select a table"
+        ></p-dropdown>
+      </div>
+      <div class="calendar">
+        <p-calendar formControlName="date" dateFormat="yy-mm-dd"></p-calendar>
+      </div>
+    </div>
+    <div
+      class="container-converter"
+      *ngIf="['A', 'B'].includes(currencyForm.get('selectedTable')?.value)"
+    >
+      <label class="label-currencies">Przelicz walutę:</label>
+      <form [formGroup]="currencyConverterForm" (ngSubmit)="convertCurrency()">
+        <div class="input-wrapper">
+          <p-inputNumber
+            formControlName="amount"
+            [min]="0"
+            required
+            placeholder="Podaj kwotę"
+          ></p-inputNumber>
+          <div
+            *ngIf="
+              currencyConverterForm.controls['amount'].invalid &&
+              currencyConverterForm.controls['amount'].touched
+            "
+            class="error-control"
+          >
+            Kwota musi być większa od 0.
+          </div>
+        </div>
+        <div class="input-wrapper">
+          <p-dropdown
+            formControlName="fromCurrency"
+            [options]="currencies"
+            optionLabel="code"
+            required
+            placeholder="Wybierz walutę"
+          ></p-dropdown>
+          <div
+            *ngIf="
+              currencyConverterForm.controls['fromCurrency'].invalid &&
+              currencyConverterForm.controls['fromCurrency'].touched
+            "
+            class="error-control"
+          >
+            Wybierz walutę.
+          </div>
+        </div>
+        <div class="input-wrapper">
+          <p-dropdown
+            formControlName="toCurrency"
+            [options]="currencies"
+            optionLabel="code"
+            required
+            placeholder="Wybierz walutę"
+          ></p-dropdown>
+          <div
+            *ngIf="
+              currencyConverterForm.controls['toCurrency'].invalid &&
+              currencyConverterForm.controls['toCurrency'].touched
+            "
+            class="error-control"
+          >
+            Wybierz walutę.
+          </div>
+        </div>
+        <button
+          pButton
+          type="submit"
+          [label]="label"
+          [disabled]="currencyConverterForm.invalid"
+          class="btn-converter"
+        ></button>
+      </form>
+      <div *ngIf="convertedAmount.value > 0">
+        <h3>
+          Otrzymasz:
+          {{ convertedAmount.value | number : "1.2-2" }}
+          {{ this.currencyConverterForm.value.toCurrency.code }}
+        </h3>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+  <p-table
+    [value]="currencies"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[10, 25, 50, 100]"
+    *ngIf="!errorMessage"
+    styleClass="p-datatable-gridlines currencies-table"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Currency</th>
+        <th>Code</th>
+        <th
+          *ngIf="['A', 'B'].includes(currencyForm.get('selectedTable')?.value)"
+        >
+          Mid
+        </th>
+        <th *ngIf="currencyForm.get('selectedTable')?.value === 'C'">Bid</th>
+        <th *ngIf="currencyForm.get('selectedTable')?.value === 'C'">Ask</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-currency>
+      <tr>
+        <td>{{ currency.currency }}</td>
+        <td>{{ currency.code }}</td>
+        <td
+          *ngIf="['A', 'B'].includes(currencyForm.get('selectedTable')?.value)"
+        >
+          {{ currency.mid }}
+        </td>
+        <td *ngIf="currencyForm.get('selectedTable')?.value === 'C'">
+          {{ currency.bid }}
+        </td>
+        <td *ngIf="currencyForm.get('selectedTable')?.value === 'C'">
+          {{ currency.ask }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

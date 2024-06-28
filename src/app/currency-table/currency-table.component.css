@@ -1,0 +1,37 @@
+.container-data {
+  align-items: baseline;
+  justify-content: flex-start;
+}
+.input-wrapper {
+  margin: 20px 0;
+}
+
+.container-calendar {
+  margin-bottom: 20px;
+}
+.container-currencies {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 20px;
+}
+.container-dropdown {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0;
+}
+.currencies-table {
+  width: 50%;
+}
+
+.label-currencies {
+  font-size: 25px;
+  margin-bottom: 10px;
+}
+button.p-element.btn-converter.p-button.p-component {
+  margin-bottom: 20px;
+}
+.error-control {
+  margin-top: 10px;
+  font-weight: 400;
+  color: #cf1212;
+}
