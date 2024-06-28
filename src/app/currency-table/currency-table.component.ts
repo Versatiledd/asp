@@ -16,6 +16,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { TableModule } from 'primeng/table';
 import { BehaviorSubject, Subscription, catchError, of } from 'rxjs';
 import { CurrencyService } from 'src/services/currency-service';
+import { ToastModule } from 'primeng/toast';
 
 interface Currency {
   code: string;
@@ -39,8 +40,10 @@ interface CurrencyTable {
     ReactiveFormsModule,
     InputNumberModule,
     ButtonModule,
+    ToastModule,
   ],
   templateUrl: './currency-table.component.html',
+  providers: [MessageService],
   styleUrls: ['./currency-table.component.css'],
 })
 export class CurrencyTableComponent implements OnInit {
@@ -65,9 +68,11 @@ export class CurrencyTableComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadCurrencyTable(this.selectedTable);
-
     this.initCurrencyForm();
+    this.loadCurrencyTable(
+      this.selectedTable,
+      this.currencyForm.get('date')?.value
+    );
 
     this.initConverterCurrencyForm();
 
@@ -85,6 +90,8 @@ export class CurrencyTableComponent implements OnInit {
       selectedTable: ['A'],
       date: [moment().toDate()],
     });
+    const currentDate = moment().format('YYYY-MM-DD');
+    this.currencyForm.get('date')?.setValue(currentDate);
   }
   initConverterCurrencyForm() {
     this.currencyConverterForm = this.fb.group({
@@ -136,6 +143,10 @@ export class CurrencyTableComponent implements OnInit {
   convertCurrency(): void {
     if (this.currencyConverterForm.valid) {
       const formValues = this.currencyConverterForm.value;
+      if (formValues.fromCurrency.code === formValues.toCurrency.code) {
+        this.showError();
+        return;
+      }
       const fromRate = this.currencies.find(
         (rate) => rate.code === formValues.fromCurrency.code
       )?.mid;
@@ -146,5 +157,12 @@ export class CurrencyTableComponent implements OnInit {
         this.convertedAmount.next((formValues.amount / fromRate) * toRate);
       }
     }
+  }
+  showError() {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Błąd konwersji',
+      detail: 'Nie można konwertować tej samej waluty.',
+    });
   }
 }

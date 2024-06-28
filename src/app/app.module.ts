@@ -12,15 +12,10 @@ import {
 } from '@angular/common/http';
 import { CurrencyTableComponent } from './currency-table/currency-table.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MessageService } from 'primeng/api';
 
 @NgModule({
   declarations: [AppComponent],
-  providers: [
-    CurrencyService,
-    provideHttpClient(withInterceptorsFromDi()),
-    MessageService,
-  ],
+  providers: [CurrencyService, provideHttpClient(withInterceptorsFromDi())],
   bootstrap: [AppComponent],
   imports: [
     BrowserModule,

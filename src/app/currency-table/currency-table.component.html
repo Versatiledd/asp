@@ -94,7 +94,6 @@
       </div>
     </div>
   </div>
-  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
   <p-table
     [value]="currencies"
     [paginator]="true"
@@ -135,3 +134,4 @@
     </ng-template>
   </p-table>
 </div>
+<p-toast></p-toast>
