@@ -35,3 +35,14 @@ button.p-element.btn-converter.p-button.p-component {
   font-weight: 400;
   color: #cf1212;
 }
+.container-message {
+  display: flex;
+  align-items: center;
+}
+button.p-element.btn-reset.p-button.p-component {
+  padding: 10px;
+  margin-left: 20px;
+  height: 30px;
+  background: #2e7f4c;
+  border: none;
+}

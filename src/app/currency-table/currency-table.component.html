@@ -82,12 +82,15 @@
           class="btn-converter"
         ></button>
       </form>
-      <div *ngIf="convertedAmount.value > 0">
+      <div class="container-message" *ngIf="convertedAmount.value > 0">
         <h3>
           Otrzymasz:
           {{ convertedAmount.value | number : "1.2-2" }}
           {{ this.currencyConverterForm.value.toCurrency.code }}
         </h3>
+        <button pButton (click)="resetConverterForm()" class="btn-reset">
+          Resetuj
+        </button>
       </div>
     </div>
   </div>

@@ -9,7 +9,7 @@ export class CurrencyService {
   constructor(private http: HttpClient) {}
 
   getExchangeRates(tableType: string, date?: string): Observable<any> {
-    let url = `http://api.nbp.pl/api/exchangerates/tables/${tableType}`;
+    let url = `https://api.nbp.pl/api/exchangerates/tables/${tableType}`;
     if (date) {
       url += `?date=${date}`;
     }
